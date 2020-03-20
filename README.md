@@ -1,2 +1,2 @@
 # php-array
-A custom PHP array handler
+A custom PHP array handler based on Laravel's Illuminate/Support/Arr class 
