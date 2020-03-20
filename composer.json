@@ -1,10 +1,11 @@
 {
     "name": "antaresbr/arrayhandler",
     "description": "A custom PHP array handler based on Laravel's Illuminate/Support/Arr class",
-    "homepage": "https://github.com/antaresbr/php-array",
+    "homepage": "https://github.com/antaresbr/php-arrayhandler",
     "keywords": [
         "php",
-        "array"
+        "array",
+	"hanndler"
     ],
     "authors": [
         {
