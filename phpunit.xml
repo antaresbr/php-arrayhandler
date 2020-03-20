@@ -1,0 +1,7 @@
+<phpunit testdox="true" colors="true">
+    <testsuites>
+        <testsuite name="Array handler">
+            <file>tests/ArrTest.php</file>
+        </testsuite>
+    </testsuites>
+</phpunit>

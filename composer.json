@@ -1,0 +1,28 @@
+{
+    "name": "antaresbr/arrayhandler",
+    "description": "A custom PHP array handler based on Laravel's Illuminate/Support/Arr class",
+    "homepage": "https://github.com/antaresbr/php-array",
+    "keywords": [
+        "php",
+        "array"
+    ],
+    "authors": [
+        {
+            "name": "Eduardo Guerra",
+            "email": "eduardo.antares@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Antares\\Support\\ArrayHandler\\": "src"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
