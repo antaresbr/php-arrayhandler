@@ -1,13 +1,69 @@
 <?php
 
-namespace Antares\Support\ArrayHandler;
+namespace Antares\Support;
 
+use Antares\Support\Collection\AbstractCollection;
 use ArrayAccess;
+use Closure;
 use InvalidArgumentException;
 
 class Arr
 {
-    use ArrTraits;
+    /**
+     * Return the default value of the given value.
+     *
+     * @param  mixed  $value
+     * @return mixed
+     */
+    public static function value($value)
+    {
+        return $value instanceof Closure ? $value() : $value;
+    }
+
+    /**
+     * Get an item from an array or object using "dot" notation.
+     *
+     * @param  mixed  $target
+     * @param  string|array|int  $key
+     * @param  mixed  $default
+     * @return mixed
+     */
+    public static function data_get($target, $key, $default = null)
+    {
+        if (is_null($key)) {
+            return $target;
+        }
+
+        $key = is_array($key) ? $key : explode('.', $key);
+
+        while (!is_null($segment = array_shift($key))) {
+            if ($segment === '*') {
+                if ($target instanceof AbstractCollection) {
+                    $target = $target->getData();
+                } elseif (!is_array($target)) {
+                    return static::value($default);
+                }
+
+                $result = [];
+
+                foreach ($target as $item) {
+                    $result[] = static::data_get($item, $key);
+                }
+
+                return in_array('*', $key) ? Arr::collapse($result) : $result;
+            }
+
+            if (Arr::accessible($target) && Arr::exists($target, $segment)) {
+                $target = $target[$segment];
+            } elseif (is_object($target) && isset($target->{$segment})) {
+                $target = $target->{$segment};
+            } else {
+                return static::value($default);
+            }
+        }
+
+        return $target;
+    }
 
     /**
      * Determine whether the given value is array accessible.
@@ -48,8 +104,8 @@ class Arr
         $results = [];
 
         foreach ($array as $values) {
-            if ($values instanceof Collection) {
-                $values = $values->all();
+            if ($values instanceof AbstractCollection) {
+                $values = $values->getData();
             } elseif (!is_array($values)) {
                 continue;
             }
@@ -208,7 +264,7 @@ class Arr
         $result = [];
 
         foreach ($array as $item) {
-            $item = $item instanceof Collection ? $item->all() : $item;
+            $item = $item instanceof AbstractCollection ? $item->getData() : $item;
 
             if (!is_array($item)) {
                 $result[] = $item;

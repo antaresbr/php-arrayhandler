@@ -1,6 +1,8 @@
 <?php declare(strict_types=1);
 
-use Antares\Support\ArrayHandler\Arr;
+use Antares\Support\Arr;
+use Antares\Support\AssociativeCollection;
+use Antares\Support\SimpleCollection;
 use PHPUnit\Framework\TestCase;
 
 final class ArrTest extends TestCase
@@ -9,44 +11,44 @@ final class ArrTest extends TestCase
     {
         $wa = [
             'fruits' => [
-                'apple', 
-                'banana', 
+                'apple',
+                'banana',
                 'mango',
                 'avocado',
                 'grape',
-                'cherries'
+                'cherries',
             ],
             'projects' => [
                 'alpha' => [
-                    'classified' => 'secret', 
-                    'subject' => 'z-ray'
+                    'classified' => 'secret',
+                    'subject' => 'z-ray',
                 ],
-                'beta'  => [
-                    'classified' => 'ultrasecret', 
+                'beta' => [
+                    'classified' => 'ultrasecret',
                     'subject' => 'teleportation',
-                    'state' => 'advanced'
+                    'state' => 'advanced',
                 ],
-                'delta'  => [
-                    'classified' => 'topsecret', 
+                'delta' => [
+                    'classified' => 'topsecret',
                     'subject' => 'telekinesis',
-                    'state' => 'started'
-                ]
+                    'state' => 'started',
+                ],
             ],
             'cars' => [
-                [ 'car' => [ 'id' => 'ford/fusion',   'name' => 'fusion', 'brand' => 'ford' ]],
-                [ 'car' => [ 'id' => 'hyundai/azera', 'name' => 'azera',  'brand' => 'hyndai' ]],
-                [ 'car' => [ 'id' => 'vw/passat',     'name' => 'passat', 'brand' => 'vw' ]],
-                [ 'car' => [ 'id' => 'porsche/911',   'name' => '911',    'brand' => 'porsche' ]]
+                ['car' => ['id' => 'ford/fusion',   'name' => 'fusion', 'brand' => 'ford']],
+                ['car' => ['id' => 'hyundai/azera', 'name' => 'azera',  'brand' => 'hyndai']],
+                ['car' => ['id' => 'vw/passat',     'name' => 'passat', 'brand' => 'vw']],
+                ['car' => ['id' => 'porsche/911',   'name' => '911',    'brand' => 'porsche']],
             ],
             'stars' => [
-                'alcyone', 
-                'antares', 
-                'canopus', 
-                'capella', 
-                'sirius'
-            ]
+                'alcyone',
+                'antares',
+                'canopus',
+                'capella',
+                'sirius',
+            ],
         ];
-        
+
         return $wa;
     }
 
@@ -66,9 +68,9 @@ final class ArrTest extends TestCase
         $wa = Arr::add($wa, 'fruits', ['orange', 'melon']);
         $wa = Arr::add($wa, 'brands', ['ferrari', 'porshce', 'bmw', 'bugatti', 'audi', 'lamborghini', 'vw']);
 
-        $this->assertEquals(count($wa), 5);
-        $this->assertEquals(count(Arr::get($wa, 'fruits')), 6);
-        $this->assertEquals(count(Arr::get($wa, 'brands')), 7);
+        $this->assertEquals(5, count($wa));
+        $this->assertEquals(6, count(Arr::get($wa, 'fruits')));
+        $this->assertEquals(7, count(Arr::get($wa, 'brands')));
     }
 
     public function testArrCollapseMethod()
@@ -92,8 +94,8 @@ final class ArrTest extends TestCase
         $wa = $this->getWorkArray();
 
         // except
-        $this->assertEquals(count(Arr::except($wa, 'projects')), 3);
-        $this->assertEquals(count(Arr::except($wa, ['fruits', 'cars'])), 2);
+        $this->assertEquals(3, count(Arr::except($wa, 'projects')));
+        $this->assertEquals(2, count(Arr::except($wa, ['fruits', 'cars'])));
     }
 
     public function testArrExistsMethod()
@@ -135,8 +137,8 @@ final class ArrTest extends TestCase
         // flatten
         $temp = Arr::flatten($wa);
         $this->assertIsArray($temp);
-        $this->assertEquals(count($temp), 31);
-        $this->assertEquals(end($temp), 'sirius');
+        $this->assertEquals(31, count($temp));
+        $this->assertEquals('sirius', end($temp));
     }
 
     public function testArrForgetMethod()
@@ -146,7 +148,7 @@ final class ArrTest extends TestCase
         // forget
         Arr::forget($wa, ['alpha', 'delta']);
         $this->assertIsArray($wa);
-        $this->assertEquals(count($wa), 1);
+        $this->assertEquals(1, count($wa));
         $this->assertTrue(array_key_exists('beta', $wa));
     }
 
@@ -155,8 +157,8 @@ final class ArrTest extends TestCase
         $wa = $this->getWorkArray();
 
         // get
-        $this->assertEquals(Arr::get($wa, 'fruits.1'), 'banana');
-        $this->assertEquals(Arr::get($wa, 'projects.beta.state'), 'advanced');
+        $this->assertEquals('banana', Arr::get($wa, 'fruits.1'));
+        $this->assertEquals('advanced', Arr::get($wa, 'projects.beta.state'));
     }
 
     public function testArrHasMethod()
@@ -190,7 +192,7 @@ final class ArrTest extends TestCase
         // only
         $wa = Arr::only($wa, ['fruits', 'stars']);
         $this->assertIsArray($wa);
-        $this->assertEquals(count($wa), 2);
+        $this->assertEquals(2, count($wa));
         $this->assertTrue(array_key_exists('fruits', $wa));
         $this->assertTrue(array_key_exists('stars', $wa));
     }
@@ -202,7 +204,7 @@ final class ArrTest extends TestCase
         // pluck
         $wa = Arr::pluck($wa['cars'], 'car.id');
         $this->assertIsArray($wa);
-        $this->assertEquals(count($wa), 4);
+        $this->assertEquals(4, count($wa));
         $this->assertTrue(array_search('porsche/911', $wa) !== false);
     }
 
@@ -213,8 +215,8 @@ final class ArrTest extends TestCase
         // prepend
         $fruits = Arr::prepend($wa['fruits'], 'orange');
         $this->assertIsArray($fruits);
-        $this->assertEquals(count($fruits), 7);
-        $this->assertEquals(reset($fruits), 'orange');
+        $this->assertEquals(7, count($fruits));
+        $this->assertEquals('orange', reset($fruits));
     }
 
     public function testArrPullMethod()
@@ -223,8 +225,8 @@ final class ArrTest extends TestCase
 
         // pull
         $pulled = Arr::pull($wa['fruits'], 1);
-        $this->assertEquals(count($wa['fruits']), 5);
-        $this->assertEquals($pulled, 'banana');
+        $this->assertEquals(5, count($wa['fruits']));
+        $this->assertEquals('banana', $pulled);
     }
 
     public function testArrRandomMethod()
@@ -234,7 +236,7 @@ final class ArrTest extends TestCase
         // random
         $stars = Arr::random($wa['stars'], 3);
         $this->assertIsArray($stars);
-        $this->assertEquals(count($stars), 3);
+        $this->assertEquals(3, count($stars));
         $this->assertTrue(array_search($stars[0], $wa['stars']) !== false);
     }
 
@@ -245,9 +247,9 @@ final class ArrTest extends TestCase
         // set
         Arr::set($wa, 'projects.delta.codename', 'acrux');
         Arr::set($wa, 'projects.delta.state', 'operational');
-        $this->assertEquals(count(Arr::get($wa, 'projects.delta')), 4);
-        $this->assertEquals(Arr::get($wa, 'projects.delta.codename'), 'acrux');
-        $this->assertEquals(Arr::get($wa, 'projects.delta.state'), 'operational');
+        $this->assertEquals(4, count(Arr::get($wa, 'projects.delta')));
+        $this->assertEquals('acrux', Arr::get($wa, 'projects.delta.codename'));
+        $this->assertEquals('operational', Arr::get($wa, 'projects.delta.state'));
     }
 
     public function testArrShuffleMethod()
@@ -257,7 +259,7 @@ final class ArrTest extends TestCase
         // shuffle
         $shuffled = Arr::shuffle(Arr::get($wa, 'fruits'));
         $this->assertIsArray($shuffled);
-        $this->assertEquals(count($shuffled), count(Arr::get($wa, 'fruits')));
+        $this->assertEquals(count(Arr::get($wa, 'fruits')), count($shuffled));
     }
 
     public function testArrQueryMethod()
@@ -267,7 +269,7 @@ final class ArrTest extends TestCase
         // query
         $query = Arr::query($wa);
         $this->assertIsString($query);
-        $this->assertEquals($query, "id=ford%2Ffusion&name=fusion&brand=ford");
+        $this->assertEquals('id=ford%2Ffusion&name=fusion&brand=ford', $query);
     }
 
     public function testArrWhereMethod()
@@ -279,8 +281,8 @@ final class ArrTest extends TestCase
             return (Arr::get($value, 'car.brand') == 'ford');
         });
         $this->assertIsArray($temp);
-        $this->assertEquals(count($temp), 1);
-        $this->assertEquals(arr::get(Arr::first($temp), 'car.name'), 'fusion');
+        $this->assertEquals(1, count($temp));
+        $this->assertEquals('fusion', arr::get(Arr::first($temp), 'car.name'));
     }
 
     public function testArrWrapMethod()
@@ -288,19 +290,44 @@ final class ArrTest extends TestCase
         // wrap
         $temp = Arr::wrap(null);
         $this->assertIsArray($temp);
-        $this->assertEquals(count($temp), 0);
-        
+        $this->assertEquals(0, count($temp));
+
         $temp = Arr::wrap([]);
         $this->assertIsArray($temp);
-        $this->assertEquals(count($temp), 0);
-        
+        $this->assertEquals(0, count($temp));
+
         $temp = Arr::wrap('');
         $this->assertIsArray($temp);
-        $this->assertEquals(count($temp), 1);
-        
+        $this->assertEquals(1, count($temp));
+
         $temp = Arr::wrap(['one', 'two']);
         $this->assertIsArray($temp);
-        $this->assertEquals(count($temp), 2);
-        
+        $this->assertEquals(2, count($temp));
+    }
+
+    public function testArrWithCollections()
+    {
+        $wa = $this->getWorkArray();
+
+        $collection = new SimpleCollection('string');
+        foreach ($wa['fruits'] as $item) {
+            $collection->add($item);
+        }
+        $wa = Arr::add($wa, 'collections.fruits', $collection);
+
+        $collection = new AssociativeCollection('array');
+        foreach ($wa['projects'] as $key => $item) {
+            $collection->add($key, $item);
+        }
+        $wa = Arr::add($wa, 'collections.projects', $collection);
+
+        $this->assertEquals(count($this->getWorkArray()) + 1, count($wa));
+        $this->assertEquals(2, count(Arr::get($wa, 'collections')));
+
+        $this->assertEquals(count($this->getWorkArray()['fruits']), count(Arr::get($wa, 'collections.fruits')));
+        $this->assertEquals('mango', Arr::get($wa, 'collections.fruits.2'));
+
+        $this->assertEquals(count($this->getWorkArray()['projects']), count(Arr::get($wa, 'collections.projects')));
+        $this->assertEquals('telekinesis', Arr::get($wa, 'collections.projects.delta.subject'));
     }
 }
