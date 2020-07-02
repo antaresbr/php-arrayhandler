@@ -73,6 +73,16 @@ final class ArrTest extends TestCase
         $this->assertEquals(7, count(Arr::get($wa, 'brands')));
     }
 
+    public function testArrArrayedMethod()
+    {
+        $wa = ['ferrari', 'porshce', 'bmw', 'bugatti', 'audi', 'lamborghini', 'vw'];
+        $ws = implode('%', $wa);
+
+        // arrayed
+        $this->assertEquals(json_encode($wa), json_encode(Arr::arrayed($wa)));
+        $this->assertEquals(json_encode($wa), json_encode(Arr::arrayed($ws, '%')));
+    }
+
     public function testArrCollapseMethod()
     {
         $wa = $this->getWorkArray();

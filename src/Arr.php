@@ -94,6 +94,22 @@ class Arr
     }
 
     /**
+     * Turns a string piped values into array if its not alread an array
+     *
+     * @param string|array $value The string piped values or array
+     * @param string $pipe The pipe to be used to explode values
+     * @return array
+     */
+    public static function arrayed($values, $pipe = '|')
+    {
+        if (!Arr::accessible($values)) {
+            $values = explode($pipe, $values);
+        }
+
+        return $values;
+    }
+
+    /**
      * Collapse an array of arrays into a single array.
      *
      * @param  array  $array
