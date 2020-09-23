@@ -103,7 +103,7 @@ class Arr
     public static function arrayed($values, $pipe = '|')
     {
         if (!Arr::accessible($values)) {
-            $values = explode($pipe, $values);
+            $values = empty($pipe) ? [$values] : explode($pipe, $values);
         }
 
         return $values;
